@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Service Booking</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        bg: '#121212',
+        card: '#1e1e1e',
+        primary: '#10b981',
+        'primary-hover': '#059669',
+        'card-hover': '#2a2a2a',
+        border: '#333333',
+        muted: '#9ca3af',
+        success: '#10b981',
+        warning: '#f59e0b',
+        danger: '#ef4444'
+      },
+      fontFamily: {
+        sans: ['DM Sans', 'sans-serif']
+      }
+    }
+  }
+}
+</script>
+<link rel="stylesheet" href="css/style.css">
+ </head>
+ <body class="h-full bg-bg text-white">
+  <div id="app" class="h-full w-full overflow-auto flex flex-col min-h-full">
+   <nav id="navbar" class="sticky top-0 z-50 bg-card/95 backdrop-blur border-b border-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="flex items-center justify-between h-16">
+      <button onclick="navigate('home')" class="cursor-pointer text-xl font-bold text-primary tracking-tight flex items-center gap-2 hover:opacity-75 transition"><i data-lucide="arrow-left" class="w-5 h-5"></i> SmartService</button>
+      <div class="hidden md:flex items-center gap-1" id="nav-links">
+        <a href="index.html" onclick="navigate('home')" class="px-4 py-2 text-sm font-medium text-muted hover:text-white transition rounded-lg hover:bg-card-hover">Home</a>
+        <a href="services.html" onclick="navigate('services')" class="px-4 py-2 text-sm font-medium text-muted hover:text-white transition rounded-lg hover:bg-card-hover">Services</a>
+        <a href="contact.html" onclick="navigate('contact')" class="px-4 py-2 text-sm font-medium text-muted hover:text-white transition rounded-lg hover:bg-card-hover">Contact</a>
+        <a href="dashboard.html" onclick="navigate('dashboard')" class="px-4 py-2 text-sm font-medium text-muted hover:text-white transition rounded-lg hover:bg-card-hover">Dashboard</a>
+      </div>
+      <button id="mobile-toggle" class="md:hidden p-2 rounded-lg hover:bg-card-hover transition"><i data-lucide="menu" class="w-5 h-5"></i></button>
+     </div>
+     <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-1">
+       <a href="index.html" onclick="navigate('home');document.getElementById('mobile-menu').classList.add('hidden')" class="block px-4 py-2 text-sm text-muted hover:text-white transition">Home</a>
+       <a href="services.html" onclick="navigate('services');document.getElementById('mobile-menu').classList.add('hidden')" class="block px-4 py-2 text-sm text-muted hover:text-white transition">Services</a>
+       <a href="contact.html" onclick="navigate('contact');document.getElementById('mobile-menu').classList.add('hidden')" class="block px-4 py-2 text-sm text-muted hover:text-white transition">Contact</a>
+       <a href="dashboard.html" onclick="navigate('dashboard');document.getElementById('mobile-menu').classList.add('hidden')" class="block px-4 py-2 text-sm text-muted hover:text-white transition">Dashboard</a>
+     </div>
+    </div>
+   </nav>
+   <div id="page-home" class="page active">
+    <section class="relative overflow-hidden">
+     <div class="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent"></div>
+     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative">
+      <div class="max-w-2xl">
+       <p class="text-primary font-semibold mb-3 text-sm tracking-wider uppercase">Professional Services Platform</p>
+       <h1 id="hero-heading" class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-center">Book Your Service Easily</h1>
+       <p class="text-muted text-lg mb-8 leading-relaxed">Streamlined booking for all your professional service needs. Fast, reliable, and hassle-free scheduling at your fingertips.</p>
+       <div class="flex flex-wrap gap-3">
+        <button onclick="navigate('booking')" class="px-6 py-3 bg-primary hover:bg-primary-hover text-white font-semibold rounded-xl transition">Book Now</button> <button onclick="navigate('services')" class="px-6 py-3 bg-card hover:bg-card-hover border border-border text-white font-semibold rounded-xl transition">View Services</button>
+       </div>
+      </div>
+     </div>
+    </section>
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+     <div class="flex items-center justify-between mb-10">
+      <div>
+       <h2 class="text-2xl font-bold">Popular Services</h2>
+       <p class="text-muted mt-1">Browse our most requested services</p>
+      </div><button onclick="navigate('services')" class="text-primary hover:text-primary-hover font-medium text-sm transition">View All</button>
+     </div>
+     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" id="home-services"></div>
+    </section>
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+     <h2 class="text-2xl font-bold text-center mb-10">Why Choose Us</h2>
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-card rounded-2xl p-6 border border-border">
+       <div class="w-10 h-10 bg-primary/15 rounded-xl flex items-center justify-center mb-4"><i data-lucide="clock" class="w-5 h-5 text-primary"></i>
+       </div>
+       <h3 class="font-semibold text-lg mb-2">Quick Booking</h3>
+       <p class="text-muted text-sm leading-relaxed">Book services in under 2 minutes with our streamlined process.</p>
+      </div>
+      <div class="bg-card rounded-2xl p-6 border border-border">
+       <div class="w-10 h-10 bg-primary/15 rounded-xl flex items-center justify-center mb-4"><i data-lucide="shield" class="w-5 h-5 text-primary"></i>
+       </div>
+       <h3 class="font-semibold text-lg mb-2">Verified Providers</h3>
+       <p class="text-muted text-sm leading-relaxed">All service providers are vetted and verified for quality.</p>
+      </div>
+      <div class="bg-card rounded-2xl p-6 border border-border">
+       <div class="w-10 h-10 bg-primary/15 rounded-xl flex items-center justify-center mb-4"><i data-lucide="headphones" class="w-5 h-5 text-primary"></i>
+       </div>
+       <h3 class="font-semibold text-lg mb-2">24/7 Support</h3>
+       <p class="text-muted text-sm leading-relaxed">Our support team is available around the clock to help you.</p>
+      </div>
+     </div>
+    </section>
+   </div>
+   <footer class="mt-auto bg-card border-t border-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="md:col-span-2">
+       <p class="text-xl font-bold text-primary mb-3">SmartService</p>
+       <p class="text-muted text-sm leading-relaxed max-w-sm">Professional service booking platform. Book trusted providers for all your needs, quickly and reliably.</p>
+      </div>
+      <div>
+       <h4 class="font-semibold text-sm mb-3">Quick Links</h4>
+       <ul class="space-y-2 text-sm text-muted">
+        <li><a href="index.html" onclick="navigate('home')" class="hover:text-white cursor-pointer transition">Home</a></li>
+        <li><a href="services.html" onclick="navigate('services')" class="hover:text-white cursor-pointer transition">Services</a></li>
+        <li><a href="contact.html" onclick="navigate('contact')" class="hover:text-white cursor-pointer transition">Contact</a></li>
+        <li><a href="dashboard.html" onclick="navigate('dashboard')" class="hover:text-white cursor-pointer transition">Dashboard</a></li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-semibold text-sm mb-3">Contact Info</h4>
+       <div class="space-y-2 text-sm text-muted">
+        <p id="footer-email">support@abc.com</p>
+        <p id="footer-phone">+92 300 123-4567</p>
+        <p>Karachi, Pakistan</p>
+       </div>
+      </div>
+     </div>
+     <div class="border-t border-border mt-8 pt-6 text-center text-muted text-xs">
+      © 2025 SmartService. All rights reserved.
+     </div>
+    </div>
+   </footer>
+   <div id="toast" class="fixed bottom-6 right-6 z-[100] hidden">
+    <div class="bg-card border border-border rounded-xl px-5 py-3 shadow-2xl text-sm font-medium fade-in"></div>
+   </div>
+  </div>
+<script src="js/script.js"></script>
+ </body>
+</html>
+
+
+

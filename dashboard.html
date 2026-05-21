@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Service Booking</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        bg: '#121212',
+        card: '#1e1e1e',
+        primary: '#10b981',
+        'primary-hover': '#059669',
+        'card-hover': '#2a2a2a',
+        border: '#333333',
+        muted: '#9ca3af',
+        success: '#10b981',
+        warning: '#f59e0b',
+        danger: '#ef4444'
+      },
+      fontFamily: {
+        sans: ['DM Sans', 'sans-serif']
+      }
+    }
+  }
+}
+</script>
+ <link rel="stylesheet" href="css/style.css">
+ </head>
+ <body class="h-full bg-bg text-white">
+  <div id="app" class="h-full w-full overflow-auto flex flex-col min-h-full">
+   <nav id="navbar" class="sticky top-0 z-50 bg-card/95 backdrop-blur border-b border-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="flex items-center justify-between h-16">
+      <button onclick="navigate('home')" class="cursor-pointer text-xl font-bold text-primary tracking-tight flex items-center gap-2 hover:opacity-75 transition"><i data-lucide="arrow-left" class="w-5 h-5"></i> SmartService</button>
+      <div class="hidden md:flex items-center gap-1" id="nav-links">
+        <a href="index.html" onclick="navigate('home')" class="px-4 py-2 text-sm font-medium text-muted hover:text-white transition rounded-lg hover:bg-card-hover">Home</a>
+        <a href="services.html" onclick="navigate('services')" class="px-4 py-2 text-sm font-medium text-muted hover:text-white transition rounded-lg hover:bg-card-hover">Services</a>
+        <a href="contact.html" onclick="navigate('contact')" class="px-4 py-2 text-sm font-medium text-muted hover:text-white transition rounded-lg hover:bg-card-hover">Contact</a>
+        <a href="dashboard.html" onclick="navigate('dashboard')" class="px-4 py-2 text-sm font-medium text-muted hover:text-white transition rounded-lg hover:bg-card-hover">Dashboard</a>
+      </div>
+      <button id="mobile-toggle" class="md:hidden p-2 rounded-lg hover:bg-card-hover transition"><i data-lucide="menu" class="w-5 h-5"></i></button>
+     </div>
+     <div id="mobile-menu" class="hidden md:hidden pb-4 space-y-1">
+       <a href="index.html" onclick="navigate('home');document.getElementById('mobile-menu').classList.add('hidden')" class="block px-4 py-2 text-sm text-muted hover:text-white transition">Home</a>
+       <a href="services.html" onclick="navigate('services');document.getElementById('mobile-menu').classList.add('hidden')" class="block px-4 py-2 text-sm text-muted hover:text-white transition">Services</a>
+       <a href="contact.html" onclick="navigate('contact');document.getElementById('mobile-menu').classList.add('hidden')" class="block px-4 py-2 text-sm text-muted hover:text-white transition">Contact</a>
+       <a href="dashboard.html" onclick="navigate('dashboard');document.getElementById('mobile-menu').classList.add('hidden')" class="block px-4 py-2 text-sm text-muted hover:text-white transition">Dashboard</a>
+     </div>
+    </div>
+   </nav>
+   <div id="page-dashboard" class="page active">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+     <div class="flex flex-col md:flex-row gap-6">
+      <aside class="md:w-56 shrink-0">
+       <div class="bg-card rounded-2xl border border-border p-4 space-y-1">
+        <button onclick="showDashTab('overview')" class="dash-tab w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-3 active"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button> <button onclick="showDashTab('bookings')" class="dash-tab w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-3"><i data-lucide="calendar" class="w-4 h-4"></i> My Bookings</button> <button onclick="navigate('profile')" class="dash-tab w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-3 hover:bg-card-hover text-muted hover:text-white"><i data-lucide="user" class="w-4 h-4"></i> Profile</button> <button onclick="handleLogout()" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-3 hover:bg-danger/10 text-danger"><i data-lucide="log-out" class="w-4 h-4"></i> Logout</button>
+       </div>
+      </aside>
+      <main class="flex-1">
+       <div id="dash-overview">
+        <h1 class="text-2xl font-bold mb-6" id="dash-greeting">Welcome back!</h1>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+         <div class="bg-card rounded-2xl border border-border p-5">
+          <p class="text-muted text-xs font-medium uppercase tracking-wider mb-1">Total Bookings</p>
+          <p class="text-2xl font-bold" id="stat-total">0</p>
+         </div>
+         <div class="bg-card rounded-2xl border border-border p-5">
+          <p class="text-muted text-xs font-medium uppercase tracking-wider mb-1">Upcoming</p>
+          <p class="text-2xl font-bold text-primary" id="stat-upcoming">0</p>
+         </div>
+         <div class="bg-card rounded-2xl border border-border p-5">
+          <p class="text-muted text-xs font-medium uppercase tracking-wider mb-1">Completed</p>
+          <p class="text-2xl font-bold text-success" id="stat-completed">0</p>
+         </div>
+        </div>
+        <h2 class="text-lg font-semibold mb-4">Recent Bookings</h2>
+        <div id="recent-bookings" class="bg-card rounded-2xl border border-border overflow-hidden"></div>
+       </div>
+       <div id="dash-bookings" class="hidden">
+        <h1 class="text-2xl font-bold mb-6">My Bookings</h1>
+        <div id="all-bookings" class="bg-card rounded-2xl border border-border overflow-hidden"></div>
+       </div>
+      </main>
+     </div>
+    </div>
+   </div>
+   <footer class="mt-auto bg-card border-t border-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="md:col-span-2">
+       <p class="text-xl font-bold text-primary mb-3">SmartService</p>
+       <p class="text-muted text-sm leading-relaxed max-w-sm">Professional service booking platform. Book trusted providers for all your needs, quickly and reliably.</p>
+      </div>
+      <div>
+       <h4 class="font-semibold text-sm mb-3">Quick Links</h4>
+       <ul class="space-y-2 text-sm text-muted">
+        <li><a href="index.html" onclick="navigate('home')" class="hover:text-white cursor-pointer transition">Home</a></li>
+        <li><a href="services.html" onclick="navigate('services')" class="hover:text-white cursor-pointer transition">Services</a></li>
+        <li><a href="contact.html" onclick="navigate('contact')" class="hover:text-white cursor-pointer transition">Contact</a></li>
+        <li><a href="dashboard.html" onclick="navigate('dashboard')" class="hover:text-white cursor-pointer transition">Dashboard</a></li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-semibold text-sm mb-3">Contact Info</h4>
+       <div class="space-y-2 text-sm text-muted">
+        <p id="footer-email">support@abc.com</p>
+        <p id="footer-phone">+92 300 123-4567</p>
+        <p>Karachi, Pakistan</p>
+       </div>
+      </div>
+     </div>
+     <div class="border-t border-border mt-8 pt-6 text-center text-muted text-xs">
+      © 2025 SmartService. All rights reserved.
+     </div>
+    </div>
+   </footer>
+   <div id="toast" class="fixed bottom-6 right-6 z-[100] hidden">
+    <div class="bg-card border border-border rounded-xl px-5 py-3 shadow-2xl text-sm font-medium fade-in"></div>
+   </div>
+  </div>
+<script src="js/script.js"></script>
+ </body>
+</html>
+
+
+

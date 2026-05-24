@@ -188,7 +188,7 @@ async function handleLogin(e) {
 
   try {
 
-    const response = await fetch("http://smartservice-navy.vercel.app/login", {
+    const response = await fetch("https://smartservice-navy.vercel.app/login", {
 
       method: "POST",
 
@@ -273,7 +273,7 @@ async function handleRegister(e) {
   try {
 
     const response = await fetch(
-      "http://smartservice-navy.vercel.app/register",
+      "https://smartservice-navy.vercel.app/register",
       {
 
         method: "POST",
@@ -453,7 +453,7 @@ async function handleContact(e) {
   try {
 
     const response = await fetch(
-      "http://smartservice-navy.vercel.app/contact",
+      "https://smartservice-navy.vercel.app/contact",
       {
 
         method: "POST",
@@ -524,7 +524,7 @@ async function loadDashboardData() {
   try {
 
     const response = await fetch(
-      `http://smartservice-navy.vercel.app/my-bookings?email=${state.user.email}`
+      `https://smartservice-navy.vercel.app/my-bookings?email=${state.user.email}`
     );
 
     const bookings = await response.json();
@@ -843,7 +843,7 @@ async function markCompleted(id) {
   try {
 
     const response = await fetch(
-      `http://smartservice-navy.vercel.app/update-booking-status/${id}`,
+      `https://smartservice-navy.vercel.app/update-booking-status/${id}`,
       {
         method: "PUT",
         headers: {

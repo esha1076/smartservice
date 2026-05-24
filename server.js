@@ -57,10 +57,27 @@ db.connect((err) => {
       )
     `;
 
-    const addStatusColumn = `
-      ALTER TABLE bookings
-      ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'upcoming'
-    `;
+    function ensureStatusColumn() {
+      db.query(
+        "SHOW COLUMNS FROM bookings LIKE 'status'",
+        (err, result) => {
+          if (err) {
+            console.log("Status column check error", err);
+            return;
+          }
+          if (!result || result.length === 0) {
+            db.query(
+              `ALTER TABLE bookings ADD COLUMN status VARCHAR(50) DEFAULT 'upcoming'`,
+              (alterErr) => {
+                if (alterErr) {
+                  console.log("Add status column error", alterErr);
+                }
+              }
+            );
+          }
+        }
+      );
+    }
 
     db.query(createUsersTable, (err) => {
       if (err) {
@@ -71,12 +88,8 @@ db.connect((err) => {
     db.query(createBookingsTable, (err) => {
       if (err) {
         console.log("Bookings table error", err);
-      }
-    });
-
-    db.query(addStatusColumn, (err) => {
-      if (err) {
-        console.log("Add status column error", err);
+      } else {
+        ensureStatusColumn();
       }
     });
 

@@ -44,40 +44,18 @@ db.connect((err) => {
     `;
 
     // BOOKINGS TABLE
-    const createBookingsTable = `
-      CREATE TABLE IF NOT EXISTS bookings (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        user_email VARCHAR(255) NOT NULL,
-        service VARCHAR(255) NOT NULL,
-        booking_date DATE NOT NULL,
-        booking_time VARCHAR(50) NOT NULL,
-        message TEXT,
-        status VARCHAR(50) DEFAULT 'upcoming',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `;
-
-    function ensureStatusColumn() {
-      db.query(
-        "SHOW COLUMNS FROM bookings LIKE 'status'",
-        (err, result) => {
-          if (err) {
-            console.log("Status column check error", err);
-            return;
-          }
-          if (!result || result.length === 0) {
-            db.query(
-              `ALTER TABLE bookings ADD COLUMN status VARCHAR(50) DEFAULT 'upcoming'`,
-              (alterErr) => {
-                if (alterErr) {
-                  console.log("Add status column error", alterErr);
-                }
-              }
-            );
-          }
-        }
-      );
-    }
+  const createBookingsTable = `
+  CREATE TABLE IF NOT EXISTS bookings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_email VARCHAR(255) NOT NULL,
+    service VARCHAR(255) NOT NULL,
+    booking_date DATE NOT NULL,
+    booking_time VARCHAR(50) NOT NULL,
+    message TEXT,
+    status VARCHAR(50) DEFAULT 'upcoming',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`;
 
     db.query(createUsersTable, (err) => {
       if (err) {
@@ -88,8 +66,6 @@ db.connect((err) => {
     db.query(createBookingsTable, (err) => {
       if (err) {
         console.log("Bookings table error", err);
-      } else {
-        ensureStatusColumn();
       }
     });
 
@@ -226,13 +202,13 @@ app.post("/booking", (req, res) => {
 
   const sql = `
     INSERT INTO bookings
-    (user_email, service, booking_date, booking_time, message, status)
-    VALUES (?, ?, ?, ?, ?, ?)
+    (user_email, service, booking_date, booking_time, message)
+    VALUES (?, ?, ?, ?, ?)
   `;
 
   db.query(
     sql,
-    [user_email, service, booking_date, booking_time, message, 'upcoming'],
+    [user_email, service, booking_date, booking_time, message],
     (err, result) => {
 
       if (err) {

@@ -62,23 +62,6 @@ function navigate(page) {
 
 }
 
-function initBookingPage() {
-  const bookingServiceInfo = document.getElementById('booking-service-info');
-  if (!bookingServiceInfo) return;
-
-  const selectedService = JSON.parse(
-    sessionStorage.getItem('selectedService') || 'null'
-  );
-
-  if (selectedService && selectedService.name) {
-    bookingServiceInfo.textContent = selectedService.name;
-    bookingServiceInfo.dataset.service = selectedService.name;
-  } else {
-    bookingServiceInfo.textContent = 'General Service';
-    bookingServiceInfo.dataset.service = 'General Service';
-  }
-}
-
 
 // ========== SERVICES DATA ==========
 
@@ -380,9 +363,7 @@ async function handleBooking(e) {
     document.getElementById("booking-service-info");
 
   const service =
-    serviceEl?.dataset?.service ||
-    serviceEl?.textContent?.trim() ||
-    "General Service";
+    serviceEl?.dataset?.service || "General Service";
 
   const messageEl =
     document.querySelector("textarea");
@@ -635,27 +616,34 @@ async function loadMyBookings() {
         </p>
 
         <p class="text-sm mt-2">
-         Status:
-           <span class="${b.status && b.status.toLowerCase() === 'completed' ? 'text-green-400' : 'text-yellow-400'}">
-            ${b.status}
-        </span>
-       </p>
-       ${
-  b.status && b.status.toLowerCase() === "upcoming"
-    ? `
-    <button
-      onclick="markCompleted(${b.id})"
-      class="mt-3 bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white text-sm"
-    >
-      Mark Completed
-    </button>
-  `
-    : `
-    <p class="text-green-400 text-sm mt-3">
-      Booking Completed
-    </p>
-  `
-}
+          Status:
+          <span class="${
+            (b.status || 'upcoming').toLowerCase() === 'completed'
+              ? 'text-green-400'
+              : 'text-yellow-400'
+          }">
+
+            ${b.status || 'upcoming'}
+
+          </span>
+        </p>
+
+        ${
+          (b.status || 'upcoming').toLowerCase() === 'upcoming'
+            ? `
+              <button
+                onclick="markCompleted(${b.id})"
+                class="mt-3 bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white text-sm"
+              >
+                Mark Completed
+              </button>
+            `
+            : `
+              <p class="text-green-400 text-sm mt-3">
+                Booking Completed
+              </p>
+            `
+        }
 
       </div>
 
@@ -668,7 +656,6 @@ async function loadMyBookings() {
   }
 
 }
-
 
 // ========== PROFILE ==========
 
@@ -832,9 +819,8 @@ if (document.getElementById('page-profile')) {
 if (document.getElementById('page-detail')) {
   loadServiceDetails();
 }
-
 if (document.getElementById('booking-service-info')) {
-  initBookingPage();
+  loadBookingPage();
 }
 
 
@@ -860,6 +846,38 @@ document.addEventListener('DOMContentLoaded', () => {
   initServicesPage();
 
 });
+// ========== LOAD BOOKING PAGE ==========
+
+function loadBookingPage() {
+
+  const serviceInfo =
+    document.getElementById("booking-service-info");
+
+  if (!serviceInfo) return;
+
+  const selectedService = JSON.parse(
+    sessionStorage.getItem("selectedService") || "null"
+  );
+
+  if (selectedService) {
+
+    serviceInfo.innerHTML = `
+      <h3 class="text-xl font-semibold mb-2">
+        ${selectedService.name}
+      </h3>
+
+      <p class="text-muted">
+        ${selectedService.category} • ${selectedService.price}
+      </p>
+    `;
+
+    // IMPORTANT
+    serviceInfo.dataset.service =
+      selectedService.name;
+
+  }
+
+}
 async function markCompleted(id) {
 
   try {

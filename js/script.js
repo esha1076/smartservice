@@ -269,7 +269,6 @@ async function handleRegister(e) {
     return;
 
   }
-
   try {
 
     const response = await fetch(
@@ -374,7 +373,7 @@ async function handleBooking(e) {
   try {
 
     const response = await fetch(
-      "http://smartservice-navy.vercel.app/booking",
+      "https://smartservice-navy.vercel.app/booking",
       {
 
         method: "POST",
@@ -579,7 +578,7 @@ async function loadMyBookings() {
   try {
 
     const response = await fetch(
-      `http://smartservice-navy.vercel.app/my-bookings?email=${state.user.email}`
+      `https://smartservice-navy.vercel.app/my-bookings?email=${state.user.email}`
     );
 
     const bookings = await response.json();

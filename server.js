@@ -52,8 +52,14 @@ db.connect((err) => {
         booking_date DATE NOT NULL,
         booking_time VARCHAR(50) NOT NULL,
         message TEXT,
+        status VARCHAR(50) DEFAULT 'upcoming',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
+    `;
+
+    const addStatusColumn = `
+      ALTER TABLE bookings
+      ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'upcoming'
     `;
 
     db.query(createUsersTable, (err) => {
@@ -65,6 +71,12 @@ db.connect((err) => {
     db.query(createBookingsTable, (err) => {
       if (err) {
         console.log("Bookings table error", err);
+      }
+    });
+
+    db.query(addStatusColumn, (err) => {
+      if (err) {
+        console.log("Add status column error", err);
       }
     });
 
@@ -201,13 +213,13 @@ app.post("/booking", (req, res) => {
 
   const sql = `
     INSERT INTO bookings
-    (user_email, service, booking_date, booking_time, message)
-    VALUES (?, ?, ?, ?, ?)
+    (user_email, service, booking_date, booking_time, message, status)
+    VALUES (?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
     sql,
-    [user_email, service, booking_date, booking_time, message],
+    [user_email, service, booking_date, booking_time, message, 'upcoming'],
     (err, result) => {
 
       if (err) {

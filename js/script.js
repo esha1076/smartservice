@@ -62,6 +62,23 @@ function navigate(page) {
 
 }
 
+function initBookingPage() {
+  const bookingServiceInfo = document.getElementById('booking-service-info');
+  if (!bookingServiceInfo) return;
+
+  const selectedService = JSON.parse(
+    sessionStorage.getItem('selectedService') || 'null'
+  );
+
+  if (selectedService && selectedService.name) {
+    bookingServiceInfo.textContent = selectedService.name;
+    bookingServiceInfo.dataset.service = selectedService.name;
+  } else {
+    bookingServiceInfo.textContent = 'General Service';
+    bookingServiceInfo.dataset.service = 'General Service';
+  }
+}
+
 
 // ========== SERVICES DATA ==========
 
@@ -363,7 +380,9 @@ async function handleBooking(e) {
     document.getElementById("booking-service-info");
 
   const service =
-    serviceEl?.dataset?.service || "General Service";
+    serviceEl?.dataset?.service ||
+    serviceEl?.textContent?.trim() ||
+    "General Service";
 
   const messageEl =
     document.querySelector("textarea");
@@ -812,6 +831,10 @@ if (document.getElementById('page-profile')) {
 
 if (document.getElementById('page-detail')) {
   loadServiceDetails();
+}
+
+if (document.getElementById('booking-service-info')) {
+  initBookingPage();
 }
 
 

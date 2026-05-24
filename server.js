@@ -14,10 +14,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // ===== DATABASE CONNECTION =====
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "smartservice"
+  host: "sql12.freesqldatabase.com",
+  user: "sql12827949",
+  password: "7pyTfuqtg8",
+  database: "sql12827949",
+  port: 3306
 });
 
 

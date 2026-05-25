@@ -440,14 +440,9 @@ async function handleContact(e) {
 
   e.preventDefault();
 
-  const inputs =
-    e.target.querySelectorAll('input, textarea');
-
-  const name = inputs[0].value;
-
-  const email = inputs[1].value;
-
-  const message = inputs[2].value;
+  const name = document.getElementById('contact-name')?.value;
+const email = document.getElementById('contact-email')?.value;
+const message = document.getElementById('contact-message')?.value;
 
   try {
 

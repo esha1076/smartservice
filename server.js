@@ -44,7 +44,7 @@ db.connect((err) => {
     `;
 
     // BOOKINGS TABLE
-  const createBookingsTable = `
+    const createBookingsTable = `
   CREATE TABLE IF NOT EXISTS bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_email VARCHAR(255) NOT NULL,
@@ -53,6 +53,16 @@ db.connect((err) => {
     booking_time VARCHAR(50) NOT NULL,
     message TEXT,
     status VARCHAR(50) DEFAULT 'upcoming',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`;
+// CONTACTS TABLE
+const createContactsTable = `
+  CREATE TABLE IF NOT EXISTS contacts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   )
 `;
@@ -69,6 +79,12 @@ db.connect((err) => {
       }
     });
 
+    db.query(createContactsTable, (err) => {
+  if (err) {
+    console.log("Contacts table error", err);
+  }
+});
+
   }
 
 });
@@ -78,8 +94,8 @@ db.connect((err) => {
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "eshamaryam1076@gmail.com",
-    pass: "upkq gwkr cqih pgtr"
+    user: "process.env.EMAIL_USER",
+    pass: "process.env.EMAIL_PASS"
   }
 });
 
@@ -202,13 +218,13 @@ app.post("/booking", (req, res) => {
 
   const sql = `
     INSERT INTO bookings
-    (user_email, service, booking_date, booking_time, message)
-    VALUES (?, ?, ?, ?, ?)
+(user_email, service, booking_date, booking_time, message, status)
+VALUES (?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
     sql,
-    [user_email, service, booking_date, booking_time, message],
+    [user_email, service, booking_date, booking_time, message, "upcoming"],
     (err, result) => {
 
       if (err) {
@@ -263,31 +279,49 @@ app.post("/contact", (req, res) => {
 
   const { name, email, message } = req.body;
 
-  const mailOptions = {
-    from: email,
-    to: "eshamaryam1076@gmail.com",
-    subject: `New Contact Message from ${name}`,
-    text: `
+  // SAVE TO DATABASE
+  const sql = `
+    INSERT INTO contacts (name, email, message)
+    VALUES (?, ?, ?)
+  `;
+
+  db.query(sql, [name, email, message], (dbErr, dbResult) => {
+
+    if (dbErr) {
+
+      console.log(dbErr);
+      return res.status(500).send("Failed to save contact");
+
+    }
+
+    // SEND EMAIL
+    const mailOptions = {
+      from: email,
+      to: "eshamaryam1076@gmail.com",
+      subject: `New Contact Message from ${name}`,
+      text: `
 Name: ${name}
 Email: ${email}
 
 Message:
 ${message}
 `
-  };
+    };
 
-  transporter.sendMail(mailOptions, (err, info) => {
+    transporter.sendMail(mailOptions, (err, info) => {
 
-    if (err) {
+      if (err) {
 
-      console.log(err);
-      res.status(500).send("Email sending failed");
+        console.log(err);
+        res.status(500).send("Email sending failed");
 
-    } else {
+      } else {
 
-      res.send("Message sent successfully!");
+        res.send("Message sent successfully!");
 
-    }
+      }
+
+    });
 
   });
 

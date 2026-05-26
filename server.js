@@ -298,32 +298,6 @@ app.get("/all-bookings", (req, res) => {
   });
 
 });
-// ===== GET ALL CONTACTS =====
-
-app.get("/all-contacts", (req, res) => {
-
-  const sql = `
-    SELECT *
-    FROM contacts
-    ORDER BY created_at DESC
-  `;
-
-  db.query(sql, (err, result) => {
-
-    if (err) {
-
-      console.log(err);
-      res.status(500).send("Error fetching contacts");
-
-    } else {
-
-      res.json(result);
-
-    }
-
-  });
-
-});
 
 
 // ===== CONTACT EMAIL API =====
@@ -374,6 +348,33 @@ ${message}
       }
 
     });
+
+  });
+
+});
+
+// ===== GET ALL CONTACTS =====
+
+app.get("/all-contacts", (req, res) => {
+
+  const sql = `
+    SELECT *
+    FROM contacts
+    ORDER BY created_at DESC
+  `;
+
+  db.query(sql, (err, result) => {
+
+    if (err) {
+
+      console.log(err);
+      res.status(500).send("Error fetching contacts");
+
+    } else {
+
+      res.json(result);
+
+    }
 
   });
 

@@ -89,7 +89,12 @@ async function loadContacts() {
       "https://smartservice-navy.vercel.app/all-contacts"
     );
 
-    const contacts = await response.json();
+const text = await response.text();
+
+console.log("SERVER RESPONSE:");
+console.log(text);
+
+return;
 
     const container =
       document.getElementById("admin-contacts");

@@ -272,6 +272,58 @@ app.get("/my-bookings", (req, res) => {
   });
 
 });
+// ===== GET ALL BOOKINGS =====
+
+app.get("/all-bookings", (req, res) => {
+
+  const sql = `
+    SELECT *
+    FROM bookings
+    ORDER BY created_at DESC
+  `;
+
+  db.query(sql, (err, result) => {
+
+    if (err) {
+
+      console.log(err);
+      res.status(500).send("Error fetching bookings");
+
+    } else {
+
+      res.json(result);
+
+    }
+
+  });
+
+});
+// ===== GET ALL CONTACTS =====
+
+app.get("/all-contacts", (req, res) => {
+
+  const sql = `
+    SELECT *
+    FROM contacts
+    ORDER BY created_at DESC
+  `;
+
+  db.query(sql, (err, result) => {
+
+    if (err) {
+
+      console.log(err);
+      res.status(500).send("Error fetching contacts");
+
+    } else {
+
+      res.json(result);
+
+    }
+
+  });
+
+});
 
 
 // ===== CONTACT EMAIL API =====

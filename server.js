@@ -360,7 +360,7 @@ app.get("/all-contacts", (req, res) => {
   const sql = `
     SELECT *
     FROM contacts
-    ORDER BY created_at DESC
+    ORDER BY id DESC
   `;
 
   db.query(sql, (err, result) => {

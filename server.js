@@ -367,14 +367,16 @@ app.get("/all-contacts", (req, res) => {
 
     if (err) {
 
-      console.log(err);
-      res.status(500).send("Error fetching contacts");
+      console.log("CONTACT FETCH ERROR:", err);
 
-    } else {
-
-      res.json(result);
+      return res.status(500).json({
+        success: false,
+        error: err.message
+      });
 
     }
+
+    res.json(result);
 
   });
 

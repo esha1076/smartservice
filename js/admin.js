@@ -14,6 +14,30 @@ async function loadAllBookings() {
       document.getElementById("admin-bookings");
 
     if (!container) return;
+    const container =
+  document.getElementById("admin-bookings");
+
+if (!container) return;
+
+// TOTAL BOOKINGS
+document.getElementById("total-bookings").textContent =
+  bookings.length;
+
+// COMPLETED
+const completed = bookings.filter(
+  b => (b.status || '').toLowerCase() === 'completed'
+);
+
+document.getElementById("completed-bookings").textContent =
+  completed.length;
+
+// UPCOMING
+const upcoming = bookings.filter(
+  b => (b.status || 'upcoming').toLowerCase() === 'upcoming'
+);
+
+document.getElementById("upcoming-bookings").textContent =
+  upcoming.length;
 
     if (bookings.length === 0) {
 
@@ -90,6 +114,9 @@ async function loadContacts() {
     );
 
     const contacts = await response.json();
+    
+    document.getElementById("total-contacts").textContent =
+  contacts.length;
 
     const container =
       document.getElementById("admin-contacts");

@@ -53,7 +53,7 @@ SmartService is a full-stack service booking website where users can:
 ## Clone Repository
 
 ```bash
-git clone YOUR_GITHUB_LINK
+git clone (https://github.com/esha1076/smartservice.git)
 ```
 
 ## Install Dependencies

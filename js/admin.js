@@ -14,10 +14,6 @@ async function loadAllBookings() {
       document.getElementById("admin-bookings");
 
     if (!container) return;
-    const container =
-  document.getElementById("admin-bookings");
-
-if (!container) return;
 
 // TOTAL BOOKINGS
 document.getElementById("total-bookings").textContent =
@@ -114,7 +110,7 @@ async function loadContacts() {
     );
 
     const contacts = await response.json();
-    
+
     document.getElementById("total-contacts").textContent =
   contacts.length;
 

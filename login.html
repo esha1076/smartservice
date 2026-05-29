@@ -59,9 +59,9 @@ tailwind.config = {
       <h1 class="text-2xl font-bold mb-1">Welcome Back</h1>
       <p class="text-muted text-sm mb-6">Sign in to your account</p>
       <form onsubmit="handleLogin(event)" class="space-y-4">
-       <div><label class="block text-sm font-medium mb-1.5">Email</label><input id="login-email" name="email" type="email" required class="w-full bg-bg border border-border rounded-xl px-4 py-3 text-white text-sm" placeholder="you@example.com">
+       <div><label class="block text-sm font-medium mb-1.5">Email</label><input type="email" required class="w-full bg-bg border border-border rounded-xl px-4 py-3 text-white text-sm" placeholder="you@example.com">
        </div>
-       <div><label class="block text-sm font-medium mb-1.5">Password</label><input id="login-password" name="password" type="password" required class="w-full bg-bg border border-border rounded-xl px-4 py-3 text-white text-sm" placeholder="Enter password">
+       <div><label class="block text-sm font-medium mb-1.5">Password</label><input type="password" required class="w-full bg-bg border border-border rounded-xl px-4 py-3 text-white text-sm" placeholder="Enter password">
        </div><button type="submit" class="w-full py-3 bg-primary hover:bg-primary-hover text-white font-semibold rounded-xl transition">Sign In</button>
       </form>
       <p class="text-center text-muted text-sm mt-5">Don't have an account? <a href="register.html" onclick="navigate('register')" class="text-primary hover:underline cursor-pointer">Register</a></p>

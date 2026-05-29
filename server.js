@@ -260,10 +260,15 @@ app.get("/my-bookings", (req, res) => {
 
     if (err) {
 
-      console.log(err);
-      res.status(500).send("Error fetching bookings");
+    console.log("MY BOOKINGS ERROR:", err);
 
-    } else {
+  return res.status(500).json({
+    success: false,
+    error: err.message,
+    sqlMessage: err.sqlMessage
+  });
+
+} else {
 
       res.json(result);
 

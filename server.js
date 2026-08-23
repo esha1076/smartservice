@@ -11,6 +11,26 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const createBookingsTable = `
+  CREATE TABLE IF NOT EXISTS bookings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_email VARCHAR(255) NOT NULL,
+    service VARCHAR(255) NOT NULL,
+    booking_date DATE NOT NULL,
+    booking_time VARCHAR(50) NOT NULL,
+    message TEXT,
+    status VARCHAR(50) DEFAULT 'upcoming',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )
+`;
+
+let bookingsTableReadyResolve;
+let bookingsTableReadyReject;
+const bookingsTableReady = new Promise((resolve, reject) => {
+  bookingsTableReadyResolve = resolve;
+  bookingsTableReadyReject = reject;
+});
+
 
 // ===== DATABASE CONNECTION =====
 const db = mysql.createConnection({
@@ -28,6 +48,7 @@ db.connect((err) => {
   if (err) {
     console.log("Database connection failed");
     console.log(err);
+    bookingsTableReadyReject(err);
 
   } else {
 
@@ -43,19 +64,6 @@ db.connect((err) => {
       )
     `;
 
-    // BOOKINGS TABLE
-    const createBookingsTable = `
-  CREATE TABLE IF NOT EXISTS bookings (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_email VARCHAR(255) NOT NULL,
-    service VARCHAR(255) NOT NULL,
-    booking_date DATE NOT NULL,
-    booking_time VARCHAR(50) NOT NULL,
-    message TEXT,
-    status VARCHAR(50) DEFAULT 'upcoming',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  )
-`;
 // CONTACTS TABLE
 const createContactsTable = `
   CREATE TABLE IF NOT EXISTS contacts (
@@ -76,6 +84,9 @@ const createContactsTable = `
     db.query(createBookingsTable, (err) => {
       if (err) {
         console.log("Bookings table error", err);
+        bookingsTableReadyReject(err);
+      } else {
+        bookingsTableReadyResolve();
       }
     });
 
@@ -206,7 +217,14 @@ app.post("/login", (req, res) => {
 
 
 // ===== BOOKING API =====
-app.post("/booking", (req, res) => {
+app.post("/booking", async (req, res) => {
+
+  try {
+    await bookingsTableReady;
+  } catch (error) {
+    console.log("Bookings table unavailable", error);
+    return res.status(503).send("Booking service unavailable. Please try again.");
+  }
 
   const {
     user_email,
